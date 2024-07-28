@@ -3,6 +3,7 @@ package raisetech.StudentManagement;
 import org.apache.ibatis.annotations.Update;
 
 public class Student {
+
   private String name;
   private int age;
 
