@@ -1,8 +1,10 @@
 package raisetech.StudentManagement;
 
-import java.awt.List;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -10,12 +12,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class StudentManagementApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(StudentManagementApplication.class, args);
-	};
+  @Autowired
+  private StudentRepository repository;
 
-	@GetMapping("/diary")
-	public String hello(){
-		return "今日は雨でした。" ;
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(StudentManagementApplication.class, args);
+  }
+
+  @GetMapping(value = "/studentList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public List<Student> getStudentList() {
+    return repository.search();
+  }
+
+  @GetMapping(value = "/studentCourseList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public List<StudentCourses> getStudentCourseList() {
+    return repository.searchStudentCourses();
+  }
 }
