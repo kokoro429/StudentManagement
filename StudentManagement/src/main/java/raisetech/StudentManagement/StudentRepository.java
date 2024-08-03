@@ -4,8 +4,8 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
-//データベースそのもの。mybatisが管理して使えるようにしてくれる。ここに書いていく。
-@Mapper
+//データベースに対する操作を書く。
+@Mapper//MyBatisが管理して使えるようにしてくれる。
 public interface StudentRepository {
 
   @Select("SELECT * FROM students")
