@@ -7,25 +7,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import raisetech.StudentManagement.data.Student;
+import raisetech.StudentManagement.data.StudentCourses;
+import raisetech.StudentManagement.reposutory.StudentRepository;
 
 @SpringBootApplication
-@RestController
-public class StudentManagementApplication {
 
-  @Autowired
-  private StudentRepository repository;
+public class StudentManagementApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(StudentManagementApplication.class, args);
-  }
-
-  @GetMapping(value = "/studentList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public List<Student> getStudentList() {
-    return repository.search();
-  }
-
-  @GetMapping(value = "/studentCourseList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public List<StudentCourses> getStudentCourseList() {
-    return repository.searchStudentCourses();
   }
 }

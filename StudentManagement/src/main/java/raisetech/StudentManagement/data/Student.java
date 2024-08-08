@@ -1,7 +1,6 @@
-package raisetech.StudentManagement;
+package raisetech.StudentManagement.data;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class Student {
