@@ -19,12 +19,12 @@ public class StudentController {
     this.service = service;
   }
 
-  @GetMapping(value = "/studentList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @GetMapping("/studentList")
   public List<Student> getStudentList() {
     return service.serchStudentList();
   }
 
-  @GetMapping(value = "/studentCourseList", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  @GetMapping("/studentCourseList")
   public List<StudentCourses> getStudentCourseList() {
     return service.serchStudentCourseList();
   }
