@@ -11,8 +11,10 @@ import raisetech.StudentManagement.data.StudentCourses;
 @Mapper//MyBatisが管理して使えるようにしてくれる。
 public interface StudentRepository {
 
-  @Select("SELECT * FROM students")
+  //isDeletedがFALSEの人だけを抽出
+  @Select("SELECT * FROM students WHERE isDeleted = FALSE")
   List<Student> searchStudents();
+
 
   @Select("SELECT * FROM student_courses")
   List<StudentCourses> searchStudentCourses();
