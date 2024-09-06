@@ -6,7 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
@@ -32,7 +35,7 @@ public class StudentController {
     List<StudentCourses> studentCourses = service.serchStudentCourseList();
 
     model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
-    return "studentList" ;
+    return "studentList";
   }
 
   @GetMapping("/studentCourseList")
@@ -40,4 +43,18 @@ public class StudentController {
     return service.serchStudentCourseList();
   }
 
+  @GetMapping("/newStudent")
+  public String newStudent(Model model) {
+    model.addAttribute("studentDetail", new StudentDetail());
+    return "registerStudent";
+  }
+
+  @PostMapping("/registerStudent")
+  public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+    if (result.hasErrors()) {
+      return "registerStudent";
+    }
+    System.out.println(studentDetail.getStudent().getFullName()+"さんが新規受講生として登録されました。");
+    return "redirect:/studentList";
+  }
 }
