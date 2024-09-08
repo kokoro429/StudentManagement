@@ -54,7 +54,15 @@ public class StudentController {
     if (result.hasErrors()) {
       return "registerStudent";
     }
-    System.out.println(studentDetail.getStudent().getFullName()+"さんが新規受講生として登録されました。");
+
+    //StudentDetailからStudentオブジェクトを所得
+    Student student = studentDetail.getStudent();
+
+    //新規受講生を登録
+    service.registerStudent(student);
+
+    // コース情報も一緒に登録できるようにする。
+
     return "redirect:/studentList";
   }
 }

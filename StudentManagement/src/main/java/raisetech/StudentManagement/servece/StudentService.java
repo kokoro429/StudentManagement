@@ -24,8 +24,15 @@ public class StudentService {
     return repository.searchStudents();
   }
 
-
   public List<StudentCourses> serchStudentCourseList() {
     return repository.searchStudentCourses();
   }
+
+  public void registerStudent(Student student) {
+    //必要に応じてバリデーション処理などをここで行う
+
+    // 新規受講生をデータベースに保存
+    repository.insertStudent(student);
+  }
+
 }
