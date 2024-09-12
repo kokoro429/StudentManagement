@@ -1,5 +1,6 @@
 package raisetech.StudentManagement.controller;
 
+import java.time.LocalDate;
 import org.springframework.ui.Model;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,12 @@ public class StudentController {
 
   @GetMapping("/newStudent")
   public String newStudent(Model model) {
-    model.addAttribute("studentDetail", new StudentDetail());
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(new Student());
+    //コース情報のリストを空で初期化
+    studentDetail.setStudentCourses(new ArrayList<>());
+    studentDetail.getStudentCourses().add(new StudentCourses()); // 初期の空コースを1つ追加
+    model.addAttribute("studentDetail", studentDetail);
     return "registerStudent";
   }
 
@@ -57,11 +63,14 @@ public class StudentController {
 
     //StudentDetailからStudentオブジェクトを所得
     Student student = studentDetail.getStudent();
-
     //新規受講生を登録
     service.registerStudent(student);
 
-    // コース情報も一緒に登録できるようにする。
+    // StudentIDを各コースに設定し、コース情報を登録
+    for (StudentCourses course : studentDetail.getStudentCourses()) {
+      course.setStudentId(student.getId());
+      service.registerStudentCourse(course);
+    }
 
     return "redirect:/studentList";
   }

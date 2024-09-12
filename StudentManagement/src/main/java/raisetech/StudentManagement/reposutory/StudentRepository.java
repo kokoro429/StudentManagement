@@ -28,5 +28,11 @@ public interface StudentRepository {
   @Options(useGeneratedKeys = true, keyProperty = "id")
 //idを自動生成
   void insertStudent(Student student);
+
+  @Insert(
+      "INSERT INTO student_courses (student_id, course_name, start_date, end_date)" +
+         "VALUES (#{studentId}, #{courseName}, #{startDate}, #{endDate})"
+  )
+  void insertStudentCourse(StudentCourses couese);
 }
 

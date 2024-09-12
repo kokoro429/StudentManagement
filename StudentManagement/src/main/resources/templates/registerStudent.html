@@ -6,6 +6,7 @@
 </head>
 <body>
 <h1>受講生登録</h1>
+<h2>受講生情報登録</h2>
 <form th:action="@{/registerStudent}" th:object="${studentDetail}" method="post">
   <div>
     <label for="fullName">名前：</label>
@@ -44,11 +45,35 @@
     <label for="remark">備考：</label>
     <input type="text" id="remark" th:field="*{student.remark}" required/>
   </div>
-  <div>
+
+  <!-- コース情報登録フォームのループ -->
+  <h2>コース情報登録</h2>
+    <div>
+      <label for="courseName">コース名：</label>
+      <select id="courseName" th:field="*{studentCourses[0].courseName}" required>
+        <option value="Javaフルコース">Javaフルコース</option>
+        <option value="AWSフルコース">AWSフルコース</option>
+        <option value="デザインコース">デザインコース</option>
+        <option value="WP副業コース">WP副業コース</option>
+        <option value="Webマーケティングコース">Webマーケティングコース</option>
+      </select>
+    </div>
+    <div>
+      <label for="startDate">受講開始日：</label>
+      <input type="date" id="startDate"
+             th:field="*{studentCourses[0].startDate}" required/>
+    </div>
+    <div>
+      <label for="endDate">受講終了日：</label>
+      <input type="date" id="endDate"
+             th:field="*{studentCourses[0].endDate}" required/>
+    </div>
   </div>
+
   <div>
     <button type="submit">登録</button>
   </div>
 </form>
+
 </body>
 </html>

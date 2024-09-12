@@ -35,4 +35,10 @@ public class StudentService {
     repository.insertStudent(student);
   }
 
+  //新しくコース情報を登録するメソッド
+  public void registerStudentCourse(StudentCourses course) {
+    //コース情報をデータベースに保存
+    repository.insertStudentCourse(course);
+  }
+
 }
