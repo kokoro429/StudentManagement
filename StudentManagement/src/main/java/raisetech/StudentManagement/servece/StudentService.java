@@ -1,8 +1,6 @@
 package raisetech.StudentManagement.servece;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import raisetech.StudentManagement.data.Student;
@@ -13,7 +11,6 @@ import raisetech.StudentManagement.reposutory.StudentRepository;
 public class StudentService {
 
   private StudentRepository repository;
-  private Student student;
 
   @Autowired
   public StudentService(StudentRepository repository) {
