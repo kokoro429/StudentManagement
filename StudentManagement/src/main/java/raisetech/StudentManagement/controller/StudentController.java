@@ -11,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
@@ -30,6 +31,7 @@ public class StudentController {
     this.converter = converter;
   }
 
+  // 受講生リストを取得して表示
   @GetMapping("/studentList")
   public String getStudentList(Model model) {
     List<Student> students = service.serchStudentList();
@@ -38,10 +40,12 @@ public class StudentController {
     model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
     return "studentList";
   }
-
+  // 受講生コースリストを取得して表示
   @GetMapping("/studentCourseList")
-  public List<StudentCourses> getStudentCourseList() {
-    return service.serchStudentCourseList();
+  public String getStudentCourseList(Model model) {
+    List<StudentCourses> studentCourseList = service.serchStudentCourseList();
+    model.addAttribute("studentCourseList", studentCourseList);
+    return "studentCourseList";
   }
 
   @GetMapping("/newStudent")
@@ -50,7 +54,6 @@ public class StudentController {
     studentDetail.setStudent(new Student());
     //コース情報のリストを空で初期化
     studentDetail.setStudentCourses(new ArrayList<>());
-    studentDetail.getStudentCourses().add(new StudentCourses()); // 初期の空コースを1つ追加
     model.addAttribute("studentDetail", studentDetail);
     return "registerStudent";
   }

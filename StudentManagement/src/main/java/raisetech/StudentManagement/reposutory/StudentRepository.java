@@ -33,6 +33,6 @@ public interface StudentRepository {
       "INSERT INTO student_courses (student_id, course_name, start_date, end_date)" +
          "VALUES (#{studentId}, #{courseName}, #{startDate}, #{endDate})"
   )
-  void insertStudentCourse(StudentCourses couese);
+  void insertStudentCourse(StudentCourses course);
 }
 
