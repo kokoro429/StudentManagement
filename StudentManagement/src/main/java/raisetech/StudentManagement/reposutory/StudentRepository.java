@@ -33,6 +33,12 @@ public interface StudentRepository {
       "INSERT INTO student_courses (student_id, course_name, start_date, end_date)" +
          "VALUES (#{studentId}, #{courseName}, #{startDate}, #{endDate})"
   )
+  @Options(useGeneratedKeys = true, keyProperty = "id")
+//idを自動生成
   void insertStudentCourse(StudentCourses course);
+
+  //受講生情報を更新するメソッド
+
+
 }
 

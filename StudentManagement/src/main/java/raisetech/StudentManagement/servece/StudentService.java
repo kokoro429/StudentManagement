@@ -3,6 +3,7 @@ package raisetech.StudentManagement.servece;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourses;
 import raisetech.StudentManagement.reposutory.StudentRepository;
@@ -25,6 +26,7 @@ public class StudentService {
     return repository.searchStudentCourses();
   }
 
+  @Transactional
   public void registerStudent(Student student) {
     //必要に応じてバリデーション処理などをここで行う
 
