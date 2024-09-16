@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -75,6 +76,22 @@ public class StudentController {
       service.registerStudentCourse(course);
     }
 
+    return "redirect:/studentList";
+  }
+
+  //受講生情報更新処理
+  //受講生情報を取得して更新画面に渡す
+  @GetMapping("/editStudent/{id}")
+  public String editStudent(@PathVariable int id, Model model) {
+    Student student = service.findStudentById(id);
+    model.addAttribute("student", student);
+    return "updateStudent";
+  }
+
+  //更新処理
+  @PostMapping("/updateStudent")
+  public String updateStudent(@ModelAttribute Student student) {
+    service.updateStudent(student);
     return "redirect:/studentList";
   }
 }

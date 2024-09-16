@@ -40,4 +40,15 @@ public class StudentService {
     repository.insertStudentCourse(course);
   }
 
+
+  //受講生情報を更新するメソッド
+  //受講生情報を取得
+  public Student findStudentById(int id){
+    return repository.findStudentById(id);
+  }
+
+  //受講生情報を更新
+  public void updateStudent(Student student) {
+    repository.updateStudent(student);
+  }
 }
