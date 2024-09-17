@@ -38,10 +38,11 @@ public interface StudentRepository {
 //idを自動生成
   void insertStudentCourse(StudentCourses course);
 
-  //受講生情報を更新するメソッド
+  //受講生情報をid情報を元に取得するメソッド
   @Select("SELECT * FROM students WHERE id = #{id}")
   Student findStudentById(int id);
 
+  //受講生情報を更新するメソッド
   @Update("UPDATE students SET fullName = #{fullName},  name_ruby = #{nameRuby}, nickname = #{nickname}, email_address = #{emailAddress}, " +
       "address = #{address}, age = #{age}, gender = #{gender}, remark = #{remark} WHERE id = #{id}")
   void updateStudent(Student student);

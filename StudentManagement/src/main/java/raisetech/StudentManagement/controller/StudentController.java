@@ -41,6 +41,7 @@ public class StudentController {
     model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
     return "studentList";
   }
+
   // 受講生コースリストを取得して表示
   @GetMapping("/studentCourseList")
   public String getStudentCourseList(Model model) {
