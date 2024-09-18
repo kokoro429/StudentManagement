@@ -43,7 +43,7 @@ public class StudentService {
 
   //受講生情報を更新するメソッド
   //受講生情報を取得
-  public Student findStudentById(int id){
+  public Student findStudentById(int id) {
     return repository.findStudentById(id);
   }
 
@@ -51,4 +51,15 @@ public class StudentService {
   public void updateStudent(Student student) {
     repository.updateStudent(student);
   }
+
+  //受講生コース情報を取得
+  public List<StudentCourses> findCoursesByStudentId(int studentId) {
+    return repository.findByStudentId(studentId);
+  }
+
+  //受講生コース情報を更新
+  public void updateStudentCourse(StudentCourses course) {
+    repository.updateStudentCourse(course);
+  }
+
 }

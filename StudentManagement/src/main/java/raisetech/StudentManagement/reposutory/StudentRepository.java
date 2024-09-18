@@ -46,5 +46,15 @@ public interface StudentRepository {
   @Update("UPDATE students SET fullName = #{fullName},  name_ruby = #{nameRuby}, nickname = #{nickname}, email_address = #{emailAddress}, " +
       "address = #{address}, age = #{age}, gender = #{gender}, remark = #{remark} WHERE id = #{id}")
   void updateStudent(Student student);
+
+  //受講生コース情報をid情報を元に取得するメソッド
+  @Select("SELECT * FROM student_courses WHERE student_id = #{studentId}")
+  List<StudentCourses> findByStudentId(int studentId);
+
+  //受講生情報を更新するメソッド
+  // 受講生コース情報を更新するメソッド
+  @Update("UPDATE student_courses SET course_name = #{courseName}, start_date = #{startDate}, end_date = #{endDate} WHERE id = #{id}")
+  void updateStudentCourse(StudentCourses course);
 }
+
 

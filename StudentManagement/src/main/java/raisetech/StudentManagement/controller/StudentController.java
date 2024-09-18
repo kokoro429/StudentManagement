@@ -85,6 +85,10 @@ public class StudentController {
   @GetMapping("/editStudent/{id}")
   public String editStudent(@PathVariable int id, Model model) {
     Student student = service.findStudentById(id);
+
+    // 学生に紐づくコース情報も取得
+    List<StudentCourses> studentCourses = service.findCoursesByStudentId(id);
+    student.setStudentCourses(studentCourses);  // studentオブジェクトにコース情報をセット
     model.addAttribute("student", student);
     return "updateStudent";
   }
@@ -93,6 +97,11 @@ public class StudentController {
   @PostMapping("/updateStudent")
   public String updateStudent(@ModelAttribute Student student) {
     service.updateStudent(student);
+
+    // 受講生コース情報の更新
+    for (StudentCourses course : student.getStudentCourses()) {
+      service.updateStudentCourse(course);
+    }
     return "redirect:/studentList";
   }
 }
