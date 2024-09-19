@@ -24,19 +24,17 @@ public interface StudentRepository {
   //新規受講生をデータベースに保存するメソッド
   @Insert(
       "INSERT INTO students (fullName, name_ruby, nickname, email_address, address, age, gender, remark, isDeleted) "
-          +
-          "VALUES (#{fullName}, #{nameRuby}, #{nickname}, #{emailAddress}, #{address}, #{age}, #{gender}, #{remark}, #{isDeleted})")
+          + "VALUES (#{fullName}, #{nameRuby}, #{nickname}, #{emailAddress}, #{address}, #{age}, #{gender}, #{remark}, #{isDeleted})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
 //idを自動生成
-  void insertStudent(Student student);
+  void registerStudent(Student student);
 
   @Insert(
-      "INSERT INTO student_courses (student_id, course_name, start_date, end_date)" +
-         "VALUES (#{studentId}, #{courseName}, #{startDate}, #{endDate})"
-  )
+      "INSERT INTO student_courses (student_id, course_name, start_date, end_date)"
+          + "VALUES (#{studentId}, #{courseName}, #{startDate}, #{endDate})")
   @Options(useGeneratedKeys = true, keyProperty = "id")
 //idを自動生成
-  void insertStudentCourse(StudentCourses course);
+  void registerStudentCourse(StudentCourses studentCourses);
 
   //受講生情報をid情報を元に取得するメソッド
   @Select("SELECT * FROM students WHERE id = #{id}")
