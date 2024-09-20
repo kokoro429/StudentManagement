@@ -6,53 +6,88 @@
 </head>
 <body>
 <h1>受講生情報の更新</h1>
+<h2>受講生情報</h2>
+<form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
 
-<form th:action="@{/updateStudent}" th:object="${student}" method="post">
-  <input type="hidden" th:field="*{id}"/>
-
-  <div>
-    <label for="fullName">名前：</label>
-    <input type="text" id="fullName" th:field="*{fullName}"/>
+  <!-- 受講生情報 -->
+  <input type="hidden" th:field="*{student.id}"/>
+  <div th:object="${studentDetail.student}">
+    <div>
+      <label for="fullName">名前：</label>
+      <input type="text" id="fullName" th:field="*{fullName}"/>
+    </div>
+    <div>
+      <label for="nameRuby">カナ名:</label>
+      <input type="text" id="nameRuby" th:field="*{nameRuby}"/>
+    </div>
+    <div>
+      <label for="nickname">ニックネーム:</label>
+      <input type="text" id="nickname" th:field="*{nickname}"/>
+    </div>
+    <div>
+      <label for="emailAddress">メールアドレス:</label>
+      <input type="text" id="emailAddress" th:field="*{emailAddress}"/>
+    </div>
+    <div>
+      <label for="address">住所：</label>
+      <input type="text" id="address" th:field="*{address}"/>
+    </div>
+    <div>
+      <label for="age">年齢：</label>
+      <input type="number" id="age" th:field="*{age}"/>
+    </div>
+    <div>
+      <label for="gender">性別：</label>
+      <input type="text" id="gender" th:field="*{gender}"/>
+    </div>
+    <div>
+      <label for="remark">備考：</label>
+      <input type="text" id="remark" th:field="*{remark}"/>
+    </div>
   </div>
-  <div>
-    <label for="nameRuby">カナ名:</label>
-    <input type="text" id="nameRuby" th:field="*{nameRuby}"/>
-  </div>
 
-  <div>
-    <label for="nickname">ニックネーム:</label>
-    <input type="text" id="nickname" th:field="*{nickname}"/>
-  </div>
+  <!-- 受講生コース情報 -->
+  <h2>コース情報</h2>
+  <div th:each="studentCourse, stat : ${studentDetail.studentCourses}">
+    <input type="hidden" th:field="*{studentCourses[__${stat.index}__].id}"
+           th:value="${studentCourse.id}"/>
+    <input type="hidden" th:field="*{studentCourses[__${stat.index}__].studentId}"
+           th:value="${studentDetail.student.id}"/>
 
-  <div>
-    <label for="emailAddress">メールアドレス:</label>
-    <input type="text" id="emailAddress" th:field="*{emailAddress}"/>
-  </div>
+    <label th:for="'courseName_' + ${stat.index}">コース名</label>
+    <select th:id="'courseName_' + ${stat.index}"
+            th:field="*{studentCourses[__${stat.index}__].courseName}" required>
+      <option value="Javaフルコース" th:selected="${studentCourse.courseName == 'Javaフルコース'}">
+        Javaフルコース
+      </option>
+      <option value="AWSフルコース" th:selected="${studentCourse.courseName == 'AWSフルコース'}">
+        AWSフルコース
+      </option>
+      <option value="デザインコース" th:selected="${studentCourse.courseName == 'デザインコース'}">
+        デザインコース
+      </option>
+      <option value="WP副業コース" th:selected="${studentCourse.courseName == 'WP副業コース'}">
+        WP副業コース
+      </option>
+      <option value="Webマーケティングコース"
+              th:selected="${studentCourse.courseName == 'Webマーケティングコース'}">Webマーケティングコース
+      </option>
+    </select>
 
-  <div>
-    <label for="address">住所:</label>
-    <input type="text" id="address" th:field="*{address}"/>
-  </div>
+    <label th:for="'startDate_' + ${stat.index}">開始日</label>
+    <input type="date" th:id="'startDate_' + ${stat.index}"
+           th:field="*{studentCourses[__${stat.index}__].startDate}"/>
 
-  <div>
-    <label for="age">年齢:</label>
-    <input type="number" id="age" th:field="*{age}"/>
-  </div>
-
-  <div>
-    <label for="gender">性別:</label>
-    <input type="text" id="gender" th:field="*{gender}"/>
-  </div>
-
-  <div>
-    <label for="remark">備考:</label>
-    <input type="text" id="remark" th:field="*{remark}"/>
+    <label th:for="'endDate_' + ${stat.index}">終了日</label>
+    <input type="date" th:id="'endDate_' + ${stat.index}"
+           th:field="*{studentCourses[__${stat.index}__].endDate}"/>
   </div>
 
   <div>
     <button type="submit">更新</button>
   </div>
 </form>
+
 
 </body>
 </html>

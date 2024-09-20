@@ -1,20 +1,15 @@
 package raisetech.StudentManagement.controller;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import org.springframework.ui.Model;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourses;
@@ -79,14 +74,30 @@ public class StudentController {
   @GetMapping("/editStudent/{id}")
   public String editStudent(@PathVariable int id, Model model) {
     Student student = service.findStudentById(id);
-    model.addAttribute("student", student);
+    // 学生に紐づくコース情報も取得
+    List<StudentCourses> studentCourses = service.findCoursesByStudentId(id);
+    // 学生に紐づくコース情報も取得
+    // student.setStudentCourses(studentCourses);  // studentオブジェクトにコース情報をセット
+
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(student);
+    studentDetail.setStudentCourses(studentCourses);  // studentDetailオブジェクトに生徒情報とコース情報をセット
+
+    if (studentDetail.getStudentCourses() == null || studentDetail.getStudentCourses().isEmpty()) {
+      System.out.println("コース情報が存在しません");
+    }
+
+    model.addAttribute("studentDetail", studentDetail);
     return "updateStudent";
   }
 
   //更新処理
   @PostMapping("/updateStudent")
-  public String updateStudent(@ModelAttribute Student student) {
-    service.updateStudent(student);
+  public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+    if (result.hasErrors()) {
+      return "updateStudent";
+    }
+    service.updateStudentAndCourse(studentDetail);
     return "redirect:/studentList";
   }
 }
