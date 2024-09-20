@@ -73,16 +73,7 @@ public class StudentController {
   //受講生情報を取得して更新画面に渡す
   @GetMapping("/editStudent/{id}")
   public String editStudent(@PathVariable int id, Model model) {
-    Student student = service.findStudentById(id);
-    // 学生に紐づくコース情報も取得
-    List<StudentCourses> studentCourses = service.findCoursesByStudentId(id);
-    // 学生に紐づくコース情報も取得
-    // student.setStudentCourses(studentCourses);  // studentオブジェクトにコース情報をセット
-
-    StudentDetail studentDetail = new StudentDetail();
-    studentDetail.setStudent(student);
-    studentDetail.setStudentCourses(studentCourses);  // studentDetailオブジェクトに生徒情報とコース情報をセット
-
+    StudentDetail studentDetail = service.findStudentAndCourseById(id);
     if (studentDetail.getStudentCourses() == null || studentDetail.getStudentCourses().isEmpty()) {
       System.out.println("コース情報が存在しません");
     }
