@@ -14,8 +14,4 @@ public class StudentDetail {
   private Student student;
   private List<StudentCourses> studentCourses = new ArrayList<>();
 
-  public StudentDetail() {
-
-  }
-
 }
