@@ -1,18 +1,15 @@
 package raisetech.StudentManagement.controller;
 
-import java.time.LocalDate;
+import java.util.Arrays;
 import org.springframework.ui.Model;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourses;
@@ -40,6 +37,7 @@ public class StudentController {
     model.addAttribute("studentList", converter.convertStudentDetails(students, studentCourses));
     return "studentList";
   }
+
   // 受講生コースリストを取得して表示
   @GetMapping("/studentCourseList")
   public String getStudentCourseList(Model model) {
@@ -53,7 +51,7 @@ public class StudentController {
     StudentDetail studentDetail = new StudentDetail();
     studentDetail.setStudent(new Student());
     //コース情報のリストを空で初期化
-    studentDetail.setStudentCourses(new ArrayList<>());
+    studentDetail.setStudentCourses(Arrays.asList(new StudentCourses()));
     model.addAttribute("studentDetail", studentDetail);
     return "registerStudent";
   }
@@ -67,14 +65,39 @@ public class StudentController {
     //StudentDetailからStudentオブジェクトを所得
     Student student = studentDetail.getStudent();
     //新規受講生を登録
-    service.registerStudent(student);
+    service.registerStudent(studentDetail);
+    return "redirect:/studentList";
+  }
 
-    // StudentIDを各コースに設定し、コース情報を登録
-    for (StudentCourses course : studentDetail.getStudentCourses()) {
-      course.setStudentId(student.getId());
-      service.registerStudentCourse(course);
+  //受講生情報更新処理
+  //受講生情報を取得して更新画面に渡す
+  @GetMapping("/editStudent/{id}")
+  public String editStudent(@PathVariable int id, Model model) {
+    Student student = service.findStudentById(id);
+    // 学生に紐づくコース情報も取得
+    List<StudentCourses> studentCourses = service.findCoursesByStudentId(id);
+    // 学生に紐づくコース情報も取得
+    // student.setStudentCourses(studentCourses);  // studentオブジェクトにコース情報をセット
+
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(student);
+    studentDetail.setStudentCourses(studentCourses);  // studentDetailオブジェクトに生徒情報とコース情報をセット
+
+    if (studentDetail.getStudentCourses() == null || studentDetail.getStudentCourses().isEmpty()) {
+      System.out.println("コース情報が存在しません");
     }
 
+    model.addAttribute("studentDetail", studentDetail);
+    return "updateStudent";
+  }
+
+  //更新処理
+  @PostMapping("/updateStudent")
+  public String updateStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
+    if (result.hasErrors()) {
+      return "updateStudent";
+    }
+    service.updateStudentAndCourse(studentDetail);
     return "redirect:/studentList";
   }
 }

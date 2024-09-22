@@ -1,5 +1,6 @@
 package raisetech.StudentManagement.data;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +20,7 @@ public class Student {
   private String remark;
   private boolean isDeleted;
 
-
-
+  // コース情報のリストを追加
+  private List<StudentCourses> studentCourses;
 }
 
