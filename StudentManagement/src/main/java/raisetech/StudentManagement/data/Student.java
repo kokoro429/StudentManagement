@@ -6,6 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+
 public class Student {
 
   private int id;
@@ -21,5 +22,5 @@ public class Student {
 
   // コース情報のリストを追加
   private List<StudentCourses> studentCourses;
-
 }
+
