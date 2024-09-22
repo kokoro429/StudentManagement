@@ -1,8 +1,6 @@
 package raisetech.StudentManagement.servece;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import raisetech.StudentManagement.data.Student;
@@ -13,7 +11,6 @@ import raisetech.StudentManagement.reposutory.StudentRepository;
 public class StudentService {
 
   private StudentRepository repository;
-  private Student student;
 
   @Autowired
   public StudentService(StudentRepository repository) {
@@ -24,8 +21,21 @@ public class StudentService {
     return repository.searchStudents();
   }
 
-
   public List<StudentCourses> serchStudentCourseList() {
     return repository.searchStudentCourses();
   }
+
+  public void registerStudent(Student student) {
+    //必要に応じてバリデーション処理などをここで行う
+
+    // 新規受講生をデータベースに保存
+    repository.insertStudent(student);
+  }
+
+  //新しくコース情報を登録するメソッド
+  public void registerStudentCourse(StudentCourses course) {
+    //コース情報をデータベースに保存
+    repository.insertStudentCourse(course);
+  }
+
 }
