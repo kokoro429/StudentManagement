@@ -13,8 +13,7 @@ import raisetech.StudentManagement.data.StudentCourses;
 @Mapper//MyBatisが管理して使えるようにしてくれる。
 public interface StudentRepository {
 
-  //isDeletedがFALSEの人だけを抽出
-  @Select("SELECT * FROM students WHERE isDeleted = FALSE")
+  @Select("SELECT * FROM students")// WHERE isDeleted = FALSE")//isDeletedがFALSEの人だけを抽出する場合
   List<Student> searchStudents();
 
   @Select("SELECT * FROM student_courses")
@@ -23,7 +22,7 @@ public interface StudentRepository {
   //新規受講生をデータベースに保存するメソッド
   @Insert(
       "INSERT INTO students (fullName, name_ruby, nickname, email_address, address, age, gender, remark, isDeleted) "
-          + "VALUES (#{fullName}, #{nameRuby}, #{nickname}, #{emailAddress}, #{address}, #{age}, #{gender}, #{remark}, #{isDeleted})")
+          + "VALUES (#{fullName}, #{nameRuby}, #{nickname}, #{emailAddress}, #{address}, #{age}, #{gender}, #{remark}, false)")
   @Options(useGeneratedKeys = true, keyProperty = "id")
 //idを自動生成
   void registerStudent(Student student);
@@ -44,7 +43,7 @@ public interface StudentRepository {
   @Update(
       "UPDATE students SET fullName = #{fullName},  name_ruby = #{nameRuby}, nickname = #{nickname}, email_address = #{emailAddress}, "
           +
-          "address = #{address}, age = #{age}, gender = #{gender}, remark = #{remark} WHERE id = #{id}")
+          "address = #{address}, age = #{age}, gender = #{gender}, remark = #{remark}, isDeleted = #{isDeleted} WHERE id = #{id}")
   void updateStudent(Student student);
 
   //受講生コース情報をid情報を元に取得するメソッド
@@ -55,4 +54,5 @@ public interface StudentRepository {
   // 受講生コース情報を更新するメソッド
   @Update("UPDATE student_courses SET course_name = #{courseName}, start_date = #{startDate}, end_date = #{endDate} WHERE id = #{id} AND student_id = #{studentId}")
   void updateStudentCourse(StudentCourses studentCourses);
+
 }

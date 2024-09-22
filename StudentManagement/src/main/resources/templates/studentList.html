@@ -18,6 +18,7 @@
     <th>年齢</th>
     <th>性別</th>
     <th>備考</th>
+    <th>削除状態</th>
   </tr>
   </thead>
   <tbody>
@@ -32,6 +33,7 @@
     <td th:text="${studentDetail.student.age}">20</td>
     <td th:text="${studentDetail.student.gender}">男性</td>
     <td th:text="${studentDetail.student.remark}">特になし</td>
+    <td th:text="${studentDetail.student.isDeleted ? '削除済み' : '有効'}"></td>
     <td>
   </tr>
   </tbody>
