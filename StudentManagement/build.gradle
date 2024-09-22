@@ -51,4 +51,3 @@ dependencies {//スターターの編集
 tasks.named('test') {
     useJUnitPlatform()
 }
-
