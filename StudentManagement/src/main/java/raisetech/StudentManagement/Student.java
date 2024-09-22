@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
+
 public class Student {
 
   private String id;
@@ -15,4 +16,6 @@ public class Student {
   private int age;
   private String gender;
 
+
 }
+
