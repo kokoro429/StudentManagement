@@ -72,19 +72,6 @@ public class StudentController {
   }
 
   //受講生情報更新処理
-  //受講生情報を取得して更新画面に渡す
-  @GetMapping("/editStudent/{id}")
-  public String editStudent(@PathVariable int id, Model model) {
-    StudentDetail studentDetail = service.findStudentAndCourseById(id);
-    if (studentDetail.getStudentCourses() == null || studentDetail.getStudentCourses().isEmpty()) {
-      System.out.println("コース情報が存在しません");
-    }
-
-    model.addAttribute("studentDetail", studentDetail);
-    return "updateStudent";
-  }
-
-  //更新処理
   @PostMapping("/updateStudent")
   public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
     service.updateStudentAndCourse(studentDetail);
