@@ -48,30 +48,22 @@ public class StudentController {
     return "studentCourseList";
   }
 
-  @GetMapping("/newStudent")
-  public String newStudent(Model model) {
-    StudentDetail studentDetail = new StudentDetail();
-    studentDetail.setStudent(new Student());
-    //コース情報のリストを空で初期化
-    studentDetail.setStudentCourses(Arrays.asList(new StudentCourses()));
-    model.addAttribute("studentDetail", studentDetail);
-    return "registerStudent";
-  }
-
   @PostMapping("/registerStudent")
-  public String registerStudent(@ModelAttribute StudentDetail studentDetail, BindingResult result) {
-    if (result.hasErrors()) {
-      return "registerStudent";
-    }
-
-    //StudentDetailからStudentオブジェクトを所得
+  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
     Student student = studentDetail.getStudent();
     //新規受講生を登録
-    service.registerStudent(studentDetail);
-    return "redirect:/studentList";
+    StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
+    return ResponseEntity.ok(responseStudentDetail);
   }
 
   //受講生情報更新処理
+  //受講生情報を取得して更新画面に渡す
+  @GetMapping("/student/{id}")
+  public StudentDetail editStudent(@PathVariable int id) {
+    return service.findStudentAndCourseById(id);
+  }
+
+  //更新処理
   @PostMapping("/updateStudent")
   public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
     service.updateStudentAndCourse(studentDetail);
