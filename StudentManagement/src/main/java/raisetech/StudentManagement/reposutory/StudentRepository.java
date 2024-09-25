@@ -9,15 +9,45 @@ import org.apache.ibatis.annotations.Update;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourses;
 
-//データベースに対する操作を書く。
-@Mapper//MyBatisが管理して使えるようにしてくれる。
+/**
+ * 受講生テーブルと受講生コーステーブルに紐づくRepositoryです。
+ */
+@Mapper
 public interface StudentRepository {
 
+  /**
+   * 受講生の全件検索を行います。
+   *
+   * @return　受講生一覧（全件）
+   */
   @Select("SELECT * FROM students")// WHERE isDeleted = FALSE")//isDeletedがFALSEの人だけを抽出する場合
   List<Student> searchStudents();
 
+  /**
+   * 受講生の検索を行います。
+   *
+   * @param id　受講生ID
+   * @return　受講生
+   */
+  @Select("SELECT * FROM students WHERE id = #{id}")
+  Student findStudentById(int id);
+
+  /**
+   * 受講生のコースの全件検索を行います。
+   *
+   * @return　受講生のコース情報（全件）
+   */
   @Select("SELECT * FROM student_courses")
-  List<StudentCourses> searchStudentCourses();
+  List<StudentCourses> searchStudentCoursesList();
+
+  /**
+   * 受講生IDに紐づく受講生コース情報を検索します。
+   *
+   * @param studentId　受講生ID
+   * @return　受講生IDに紐づく受講生コース情報
+   */
+  @Select("SELECT * FROM student_courses WHERE student_id = #{studentId}")
+  List<StudentCourses> findCourseByStudentId(int studentId);
 
   //新規受講生をデータベースに保存するメソッド
   @Insert(
@@ -35,20 +65,12 @@ public interface StudentRepository {
 //idを自動生成
   void registerStudentCourse(StudentCourses studentCourses);
 
-  //受講生情報をid情報を元に取得するメソッド
-  @Select("SELECT * FROM students WHERE id = #{id}")
-  Student findStudentById(int id);
-
   //受講生情報を更新するメソッド
   @Update(
       "UPDATE students SET fullName = #{fullName},  name_ruby = #{nameRuby}, nickname = #{nickname}, email_address = #{emailAddress}, "
           +
           "address = #{address}, age = #{age}, gender = #{gender}, remark = #{remark}, isDeleted = #{isDeleted} WHERE id = #{id}")
   void updateStudent(Student student);
-
-  //受講生コース情報をid情報を元に取得するメソッド
-  @Select("SELECT * FROM student_courses WHERE student_id = #{studentId}")
-  List<StudentCourses> findCourseByStudentId(int studentId);
 
   //受講生情報を更新するメソッド
   // 受講生コース情報を更新するメソッド
