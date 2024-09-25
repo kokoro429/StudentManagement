@@ -52,7 +52,7 @@ public interface StudentRepository {
 
   //受講生情報を更新するメソッド
   // 受講生コース情報を更新するメソッド
-  @Update("UPDATE student_courses SET course_name = #{courseName}, start_date = #{startDate}, end_date = #{endDate} WHERE id = #{id} AND student_id = #{studentId}")
+  @Update("UPDATE student_courses SET course_name = #{courseName}　WHERE id = #{id} AND student_id = #{studentId}")
   void updateStudentCourse(StudentCourses studentCourses);
 
 }
