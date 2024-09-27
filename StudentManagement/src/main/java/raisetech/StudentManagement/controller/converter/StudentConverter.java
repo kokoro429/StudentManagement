@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import raisetech.StudentManagement.data.Student;
-import raisetech.StudentManagement.data.StudentCourses;
+import raisetech.StudentManagement.data.StudentCourse;
 import raisetech.StudentManagement.domein.StudentDetail;
 
 /**
@@ -18,21 +18,21 @@ public class StudentConverter {
    * 受講生に紐づく受講生コースをマッピングする。
    * 受講生コース情報は受講生に対して複数存在するので、ループを回して受講生詳細情報を組み立てる。
    *
-   * @param students　受講生一覧
-   * @param studentCourses　受講生コースリスト
+   * @param studentList　受講生一覧
+   * @param studentCourseList　受講生コースリスト
    * @return　受講生詳細情報のリスト
    */
-  public List<StudentDetail> convertStudentDetails(List<Student> students,
-      List<StudentCourses> studentCourses) {
+  public List<StudentDetail> convertStudentDetails(List<Student> studentList,
+      List<StudentCourse> studentCourseList) {
     List<StudentDetail> studentDetails = new ArrayList<>();
-    students.forEach(student -> {
+    studentList.forEach(student -> {
       StudentDetail studentDetail = new StudentDetail();
       studentDetail.setStudent(student);
 
-      List<StudentCourses> convertStudentCourses = studentCourses.stream()
+      List<StudentCourse> convertStudentCourseList = studentCourseList.stream()
           .filter(studentCourse -> student.getId() == (studentCourse.getStudentId()))
           .collect(Collectors.toList());
-      studentDetail.setStudentCourses(convertStudentCourses);
+      studentDetail.setStudentCourseList(convertStudentCourseList);
       studentDetails.add(studentDetail);
     });
     return studentDetails;
