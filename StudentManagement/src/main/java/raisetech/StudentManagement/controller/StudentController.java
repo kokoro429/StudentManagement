@@ -1,5 +1,6 @@
 package raisetech.StudentManagement.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
@@ -19,7 +20,6 @@ import raisetech.StudentManagement.servece.StudentService;
 /**
  * 受講生の検索や登録、更新などを行うREST APIとして受け付けるControllerです。
  */
-@Validated
 @RestController
 public class StudentController {
 
@@ -65,7 +65,7 @@ public class StudentController {
    * @return　実行結果
    */
   @PostMapping("/registerStudent")
-  public ResponseEntity<StudentDetail> registerStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<StudentDetail> registerStudent(@Valid @RequestBody StudentDetail studentDetail) {
     StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
     return ResponseEntity.ok(responseStudentDetail);
   }
@@ -78,7 +78,7 @@ public class StudentController {
    * @return　実行結果
    */
   @PutMapping("/updateStudent")
-  public ResponseEntity<String> updateStudent(@RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<String> updateStudent(@Valid @RequestBody StudentDetail studentDetail) {
     service.updateStudentAndCourse(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました。");
   }
