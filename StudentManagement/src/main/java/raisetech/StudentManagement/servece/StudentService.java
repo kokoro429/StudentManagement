@@ -9,7 +9,7 @@ import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourse;
 import raisetech.StudentManagement.domein.StudentDetail;
-import raisetech.StudentManagement.reposutory.StudentRepository;
+import raisetech.StudentManagement.repository.StudentRepository;
 
 /**
  * 受講生情報を取り扱うサービスです。 受講生の検索や登録・更新処理を行います。
