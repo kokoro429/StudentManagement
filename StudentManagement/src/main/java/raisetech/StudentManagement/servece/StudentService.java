@@ -45,6 +45,12 @@ public class StudentService {
    */
   public StudentDetail findStudentAndCourseById(int id) {
     Student student = repository.findStudentById(id);
+
+    // 学生が存在しない場合は例外を投げる
+    if (student == null) {
+      throw new IllegalArgumentException("指定されたIDの学生は存在しません。");
+    }
+
     List<StudentCourse> studentCourse = repository.findCourseByStudentId(student.getId());
     return new StudentDetail(student, studentCourse);
   }
@@ -71,7 +77,7 @@ public class StudentService {
    * 受講生コース情報を登録する際の初期情報を設定する。
    *
    * @param studentCourse 　受講生コース情報
-   * @param student        　受講生
+   * @param student       　受講生
    */
   private void initStudentsCourse(StudentCourse studentCourse, Student student) {
     LocalDate now = LocalDate.now();
@@ -86,13 +92,17 @@ public class StudentService {
   }
 
   /**
-   * 受講生詳細の更新を行います。
-   * 受講生と受講生コースをそれぞれ更新します。
+   * 受講生詳細の更新を行います。 受講生と受講生コースをそれぞれ更新します。
    *
-   * @param studentDetail　受講生詳細
+   * @param studentDetail 　受講生詳細
    */
   @Transactional
   public void updateStudentAndCourse(StudentDetail studentDetail) {
+    // 学生IDの存在確認
+    if (!repository.existsById(studentDetail.getStudent().getId())) {
+      throw new IllegalArgumentException("指定されたIDの学生は存在しません。");
+    }
+
     repository.updateStudent(studentDetail.getStudent());
     studentDetail.getStudentCourseList()
         .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
