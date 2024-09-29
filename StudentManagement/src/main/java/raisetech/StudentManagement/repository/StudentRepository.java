@@ -70,7 +70,12 @@ public interface StudentRepository {
    */
   void updateStudentCourse(StudentCourse studentCourse);
 
-  @Select("SELECT COUNT(1) FROM students WHERE id = #{id}")
+  /**
+   * 受講生IDが存在しているかを確認します。
+   *
+   * @param id 受講生ID
+   * @return 受講生が存在する場合はtrue、存在しない場合はfalse
+   */
   boolean existsById(int id);
 
 }
