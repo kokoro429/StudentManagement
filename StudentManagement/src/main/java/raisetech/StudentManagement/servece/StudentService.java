@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
-import raisetech.StudentManagement.data.StudentCourses;
+import raisetech.StudentManagement.data.StudentCourse;
 import raisetech.StudentManagement.domein.StudentDetail;
-import raisetech.StudentManagement.reposutory.StudentRepository;
+import raisetech.StudentManagement.repository.StudentRepository;
 
 /**
  * 受講生情報を取り扱うサービスです。 受講生の検索や登録・更新処理を行います。
@@ -27,48 +27,84 @@ public class StudentService {
   }
 
   /**
-   * 受講生一覧検索です。 全件検索を行うので、条件指定は行いません。
+   * 受講生詳細の一覧検索です。 全件検索を行うので、条件指定は行いません。
    *
-   * @return 受講生一覧（全件）
+   * @return 受講生詳細一覧（全件）
    */
   public List<StudentDetail> serchStudentList() {
     List<Student> studentList = repository.searchStudents();
-    List<StudentCourses> studentCoursesList = repository.searchStudentCoursesList();
-    return converter.convertStudentDetails(studentList, studentCoursesList);
+    List<StudentCourse> studentCourseList = repository.searchStudentCourseList();
+    return converter.convertStudentDetails(studentList, studentCourseList);
   }
 
   /**
-   * 受講生一覧検索です。 IDに紐づく受講生情報を取得した後、その受講生に紐づく受講生コース情報を取得して設定します。
+   * 受講生詳細検索です。 IDに紐づく受講生情報を取得した後、その受講生に紐づく受講生コース情報を取得して設定します。
    *
    * @param id 　受講生ID
-   * @return　受講生
+   * @return　受講生詳細
    */
   public StudentDetail findStudentAndCourseById(int id) {
     Student student = repository.findStudentById(id);
-    List<StudentCourses> studentCourses = repository.findCourseByStudentId(student.getId());
-    return new StudentDetail(student, studentCourses);
+
+    // 学生が存在しない場合は例外を投げる
+    if (student == null) {
+      throw new IllegalArgumentException("指定されたIDの学生は存在しません。");
+    }
+
+    List<StudentCourse> studentCourse = repository.findCourseByStudentId(student.getId());
+    return new StudentDetail(student, studentCourse);
   }
 
+  /**
+   * 受講生詳細の登録を行います。 受講生と受講生コース情報を個別に登録し、受講生コース情報には受講生情報を紐づける値やコース開始日、コース終了日を設定します。
+   *
+   * @param studentDetail 　受講生詳細
+   * @return　登録情報を付与した受講生詳細
+   */
   @Transactional
   public StudentDetail registerStudent(StudentDetail studentDetail) {
-    repository.registerStudent(studentDetail.getStudent());
-    for (StudentCourses studentCourses : studentDetail.getStudentCourses()) {
-      studentCourses.setStudentId(studentDetail.getStudent().getId());
-      studentCourses.setStartDate(LocalDate.now());
-      studentCourses.setEndDate(LocalDate.now().plusYears(1));
-      repository.registerStudentCourse(studentCourses);
-    }
+    Student student = studentDetail.getStudent();
+
+    repository.registerStudent(student);
+    studentDetail.getStudentCourseList().forEach(studentCourse -> {
+      initStudentsCourse(studentCourse, student);
+      repository.registerStudentCourse(studentCourse);
+    });
     return studentDetail;
   }
 
+  /**
+   * 受講生コース情報を登録する際の初期情報を設定する。
+   *
+   * @param studentCourse 　受講生コース情報
+   * @param student       　受講生
+   */
+  private void initStudentsCourse(StudentCourse studentCourse, Student student) {
+    LocalDate now = LocalDate.now();
 
-  //受講生+コース情報を更新
+    studentCourse.setStudentId(student.getId());
+    studentCourse.setStartDate(now);
+    studentCourse.setEndDate(now.plusYears(1));
+    System.out.println("Student ID: " + student.getId());
+    System.out.println("Course Start Date: " + studentCourse.getStartDate());
+    System.out.println("Course End Date: " + studentCourse.getEndDate());
+
+  }
+
+  /**
+   * 受講生詳細の更新を行います。 受講生と受講生コースをそれぞれ更新します。
+   *
+   * @param studentDetail 　受講生詳細
+   */
   @Transactional
   public void updateStudentAndCourse(StudentDetail studentDetail) {
-    repository.updateStudent(studentDetail.getStudent());
-    for (StudentCourses studentCourses : studentDetail.getStudentCourses()) {
-      //System.out.println("Updating course with ID: " + studentCourses.getId() + ", Student ID: " + studentCourses.getStudentId());//デバッグ用
-      repository.updateStudentCourse(studentCourses);
+    // 学生IDの存在確認
+    if (!repository.existsById(studentDetail.getStudent().getId())) {
+      throw new IllegalArgumentException("指定されたIDの学生は存在しません。");
     }
+
+    repository.updateStudent(studentDetail.getStudent());
+    studentDetail.getStudentCourseList()
+        .forEach(studentCourse -> repository.updateStudentCourse(studentCourse));
   }
 }
