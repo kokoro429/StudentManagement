@@ -1,10 +1,14 @@
 package raisetech.StudentManagement.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,11 +16,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import raisetech.StudentManagement.domein.StudentDetail;
+import raisetech.StudentManagement.exception.TestException;
 import raisetech.StudentManagement.servece.StudentService;
 
 /**
  * 受講生の検索や登録、更新などを行うREST APIとして受け付けるControllerです。
  */
+@Validated
 @RestController
 public class StudentController {
 
@@ -38,8 +44,10 @@ public class StudentController {
    * @return　受講生詳細一覧（全件）
    */
   @GetMapping("/studentList")
-  public List<StudentDetail> getStudentList() {
-    return service.serchStudentList();
+  public List<StudentDetail> getStudentList() throws TestException {
+    throw new TestException(
+        "現在このAPIは利用できません。URLは「studentList」ではなく「students」を利用してください。"
+    );
   }
 
   /**
@@ -49,7 +57,7 @@ public class StudentController {
    * @return　受講生詳細
    */
   @GetMapping("/student/{id}")
-  public ResponseEntity<?> getStudent(@PathVariable int id) {
+  public ResponseEntity<?> getStudent(@PathVariable @Pattern(regexp = "^\\d+$") int id) {
     try {
       StudentDetail studentDetail = service.findStudentAndCourseById(id);
       return ResponseEntity.ok(studentDetail);
@@ -66,7 +74,7 @@ public class StudentController {
    */
   @PostMapping("/registerStudent")
   public ResponseEntity<StudentDetail> registerStudent(
-      @Valid @RequestBody StudentDetail studentDetail) {
+      @RequestBody @Valid StudentDetail studentDetail) {
     StudentDetail responseStudentDetail = service.registerStudent(studentDetail);
     return ResponseEntity.ok(responseStudentDetail);
   }
@@ -78,7 +86,7 @@ public class StudentController {
    * @return　実行結果
    */
   @PutMapping("/updateStudent")
-  public ResponseEntity<String> updateStudent(@Valid @RequestBody StudentDetail studentDetail) {
+  public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
     try {
       service.updateStudentAndCourse(studentDetail);
       return ResponseEntity.ok("更新処理が成功しました。");
@@ -86,5 +94,10 @@ public class StudentController {
       // 存在しないIDの場合のエラーメッセージを返す
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
+  }
+
+  @ExceptionHandler(TestException.class)
+  public ResponseEntity<String> handleTestException(TestException ex) {
+    return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
   }
 }
