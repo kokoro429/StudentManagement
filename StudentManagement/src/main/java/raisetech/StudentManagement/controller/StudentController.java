@@ -44,10 +44,8 @@ public class StudentController {
    * @return　受講生詳細一覧（全件）
    */
   @GetMapping("/studentList")
-  public List<StudentDetail> getStudentList() throws TestException {
-    throw new TestException(
-        "現在このAPIは利用できません。URLは「studentList」ではなく「students」を利用してください。"
-    );
+  public List<StudentDetail> getStudentList() {
+    return service.serchStudentList();
   }
 
   /**
@@ -57,13 +55,9 @@ public class StudentController {
    * @return　受講生詳細
    */
   @GetMapping("/student/{id}")
-  public ResponseEntity<?> getStudent(@PathVariable @Pattern(regexp = "^\\d+$") int id) {
-    try {
-      StudentDetail studentDetail = service.findStudentAndCourseById(id);
-      return ResponseEntity.ok(studentDetail);
-    } catch (IllegalArgumentException e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
+  public ResponseEntity<?> getStudent(@PathVariable int id) {
+    StudentDetail studentDetail = service.findStudentAndCourseById(id);
+    return ResponseEntity.ok(studentDetail);
   }
 
   /**
@@ -86,18 +80,8 @@ public class StudentController {
    * @return　実行結果
    */
   @PutMapping("/updateStudent")
-  public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
-    try {
-      service.updateStudentAndCourse(studentDetail);
-      return ResponseEntity.ok("更新処理が成功しました。");
-    } catch (IllegalArgumentException e) {
-      // 存在しないIDの場合のエラーメッセージを返す
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-  }
-
-  @ExceptionHandler(TestException.class)
-  public ResponseEntity<String> handleTestException(TestException ex) {
-    return  ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+  public ResponseEntity<StudentDetail> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
+    service.updateStudentAndCourse(studentDetail);
+    return ResponseEntity.ok(studentDetail);
   }
 }

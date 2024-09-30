@@ -48,7 +48,7 @@ public class StudentService {
 
     // 学生が存在しない場合は例外を投げる
     if (student == null) {
-      throw new IllegalArgumentException("指定されたIDの学生は存在しません。");
+      throw new IllegalArgumentException("指定されたIDの受講生は存在しません。");
     }
 
     List<StudentCourse> studentCourse = repository.findCourseByStudentId(student.getId());
@@ -100,7 +100,7 @@ public class StudentService {
   public void updateStudentAndCourse(StudentDetail studentDetail) {
     // 学生IDの存在確認
     if (!repository.existsById(studentDetail.getStudent().getId())) {
-      throw new IllegalArgumentException("指定されたIDの学生は存在しません。");
+      throw new IllegalArgumentException("指定されたIDの受講生は存在しません。");
     }
 
     repository.updateStudent(studentDetail.getStudent());

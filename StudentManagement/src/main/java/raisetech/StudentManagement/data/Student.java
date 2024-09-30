@@ -2,6 +2,7 @@ package raisetech.StudentManagement.data;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,7 +16,7 @@ import lombok.Setter;
 public class Student {
 
   //受講生ID。自動採番します。
-  @NotBlank(message = "IDは必須です")
+  @NotNull(message = "IDは必須です")
   private int id;
 
   //氏名
