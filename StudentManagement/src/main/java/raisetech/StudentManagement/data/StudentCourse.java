@@ -1,7 +1,6 @@
 package raisetech.StudentManagement.data;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +20,7 @@ public class StudentCourse {
   private int studentId;
 
   //コース名
-  @NotEmpty(message = "コース名は必須です")
+  @NotBlank(message = "コース名は必須です")
   private String courseName;
 
   //受講開始日
