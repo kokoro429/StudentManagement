@@ -35,6 +35,10 @@ dependencies {//スターターの編集
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:3.3.3'
     //Validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    //OpenAPI Generator
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
     //Apache Commons Lang　便利機能、ユーティリティ
     implementation 'org.apache.commons:commons-lang3:3.14.0'
 
