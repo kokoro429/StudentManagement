@@ -10,16 +10,18 @@ import lombok.Setter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourse;
 
-@Schema(description = "受講生詳細")
+@Schema(description = "受講生の詳細情報を含むオブジェクト")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentDetail {
 
+  @Schema(description = "受講生情報")
   @Valid
   private Student student;
 
+  @Schema(description = "受講生が履修しているコースのリスト")
   @Valid
   private List<StudentCourse> studentCourseList;
 }
