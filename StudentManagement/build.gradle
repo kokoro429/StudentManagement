@@ -60,3 +60,11 @@ dependencies {//スターターの編集
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.withType(JavaCompile).configureEach {
+    options.forkOptions.jvmArgs += ['-XX:+EnableDynamicAgentLoading']
+}
+
+tasks.withType(Test).configureEach {
+    jvmArgs += ['-XX:+EnableDynamicAgentLoading']
+}

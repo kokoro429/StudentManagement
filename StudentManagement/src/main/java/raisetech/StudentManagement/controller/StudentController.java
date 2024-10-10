@@ -5,10 +5,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import org.apache.ibatis.javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,8 +65,8 @@ public class StudentController {
    * @return　受講生詳細
    */
   @Operation(
-      summary = "一覧検索",
-      description = "受講生の一覧を検索します。",
+      summary = "受講生検索",
+      description = "受講生を検索します。",
       responses = {
           @ApiResponse(responseCode = "200", description = "受講生の詳細情報一覧が返されます。"),
           @ApiResponse(responseCode = "404", description = "受講生のデータが存在しません。"),
@@ -121,5 +123,15 @@ public class StudentController {
   public ResponseEntity<StudentDetail> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
     service.updateStudentAndCourse(studentDetail);
     return ResponseEntity.ok(studentDetail);
+  }
+
+  @GetMapping("/exception")
+  public  ResponseEntity<String> thrownException() throws NotFoundException {
+    throw  new NotFoundException("このAPIは現在利用できません。古いURLとなっています。");
+  }
+
+  @ExceptionHandler(NotFoundException.class)
+  public ResponseEntity<String> handleNotFoundException(NotFoundException ex) {
+    return ResponseEntity.badRequest().body((ex.getMessage()));
   }
 }
