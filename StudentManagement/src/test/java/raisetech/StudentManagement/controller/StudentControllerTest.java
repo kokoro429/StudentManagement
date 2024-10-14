@@ -21,7 +21,6 @@ import org.springframework.http.MediaType;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
@@ -80,7 +79,8 @@ class StudentControllerTest {
   @Test
   void 受講生詳細の一覧検索が実行できて空のリストが返ってくること() throws Exception {//受講生一覧検索
     mockMvc.perform(get("/studentList"))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(content().json("[]"));
 
     verify(service, times(1)).searchStudentList();
   }
@@ -88,45 +88,85 @@ class StudentControllerTest {
   @Test
   void IDに紐づく任意の受講生情報検索が実行できて空のリストが返ってくること()
       throws Exception {//受講生検索
-    mockMvc.perform(get("/student/{id}",999))
+    mockMvc.perform(get("/student/{id}", 999))
         .andExpect(status().isOk());
 
     verify(service, times(1)).findStudentAndCourseById(999);
   }
 
   @Test
-  void 受講生情報の登録ができること() throws Exception {//受講生登録
-    // サービスメソッドが返すモックデータを設定
-    when(service.registerStudent(any(StudentDetail.class))).thenReturn(studentDetail);
-
+  void 受講生情報の登録が実行できて空で返ってくること() throws Exception {//受講生登録
     mockMvc.perform(post("/registerStudent")
             .contentType(MediaType.APPLICATION_JSON) // コンテンツタイプを設定
-            .content(objectMapper.writeValueAsString(studentDetail))) // StudentDetailをJSONに変換
+            .content(
+                """
+                        {
+                         "student" : {
+                            "fullName" : "宮川心",
+                            "nameRuby" : "ミヤカワココロ",
+                            "nickname" : "こころ",
+                            "emailAddress" : "example@gmail.com",
+                            "address" : "香川県",
+                            "age" : "33",
+                            "gender" : "女性",
+                            "remark" : ""
+                          },
+                          "studentCourseList" : [
+                          {
+                            "courseName" : "Javaフルコース"
+                          }
+                          ]
+                        }                                            
+                    """
+            ))
         .andExpect(status().isOk()); // ステータスコードが200 OKであることを期待
 
-    verify(service, times(1)).registerStudent(any(StudentDetail.class));
+    verify(service, times(1)).registerStudent(any());
   }
 
   @Test
-  void 受講生情報の更新ができること() throws Exception {//受講生登録
-    doNothing().when(service).updateStudentAndCourse(any(StudentDetail.class));
-
+  void 受講生情報の更新が実行できて空で返ってくること() throws Exception {//受講生登録
     mockMvc.perform(put("/updateStudent")
             .contentType(MediaType.APPLICATION_JSON) // コンテンツタイプを設定
-            .content(objectMapper.writeValueAsString(studentDetail))) // StudentDetailをJSONに変換
+            .content(
+                """
+                        {
+                         "student" : {
+                            "id" : "1",
+                            "fullName" : "宮川心",
+                            "nameRuby" : "ミヤカワココロ",
+                            "nickname" : "こころ",
+                            "emailAddress" : "example@gmail.com",
+                            "address" : "香川県",
+                            "age" : "33",
+                            "gender" : "女性",
+                            "remark" : ""
+                          },
+                          "studentCourseList" : [
+                          {
+                             "id" : "2",
+                             "studentId" : "1",
+                             "courseName" : "Javaフルコース",
+                             "startDate" : "2024-01-01",
+                             "endDate" : "2025-01-01"
+                          }
+                          ]
+                        }                                            
+                    """
+            ))
         .andExpect(status().isOk()); // ステータスコードが200 OKであることを期待
 
-    verify(service, times(1)).updateStudentAndCourse(any(StudentDetail.class));
+    verify(service, times(1)).updateStudentAndCourse(any());
   }
 
   @Test
   void apiが利用できない時にNotFoundExceptionをスローすること() throws Exception {
     mockMvc.perform(get("/exception"))
-        .andExpect(status().isBadRequest())
+        .andExpect(status().is4xxClientError())
         .andExpect(content().string("このAPIは現在利用できません。古いURLとなっています。"));
   }
 
-    //入力チェック
+  //入力チェック
   @Test
   void 受講生詳細の受講生で適切な値を入力したときに入力チェックに異常が発生しないこと() {
     Set<ConstraintViolation<Student>> violations = validator.validate(student);
@@ -145,7 +185,7 @@ class StudentControllerTest {
   }
 
   @Test
-  void fullNameが1文字以上50文字以内でなかった時に入力チェックにかかること () {
+  void fullNameが1文字以上50文字以内でなかった時に入力チェックにかかること() {
     student.setFullName("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     Set<ConstraintViolation<Student>> violations = validator.validate(student);
@@ -206,7 +246,8 @@ class StudentControllerTest {
 
   @Test
   void 受講生詳細の受講生で住所を100文字以上入力した時に入力チェックにかかること() {
-    student.setAddress("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    student.setAddress(
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
     Set<ConstraintViolation<Student>> violations = validator.validate(student);
     assertThat(violations.size()).isEqualTo(1);

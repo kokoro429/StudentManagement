@@ -18,7 +18,6 @@ import lombok.Setter;
 public class Student {
 
   //受講生ID。自動採番します。
-  @NotNull(message = "IDは必須です")
   private int id;
 
   //氏名
