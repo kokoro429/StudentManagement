@@ -3,7 +3,9 @@ package raisetech.StudentManagement.data;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,6 +15,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Schema(description = "受講生コース情報")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class StudentCourse {
 
   //受講生ID。自動採番します。
@@ -32,5 +36,4 @@ public class StudentCourse {
   //受講終了日
   @DateTimeFormat(pattern = "yyyy-MM-dd")
   private LocalDate endDate;
-
-}
+  }
