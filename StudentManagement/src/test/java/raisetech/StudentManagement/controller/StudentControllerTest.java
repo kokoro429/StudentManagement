@@ -2,18 +2,16 @@ package raisetech.StudentManagement.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.http.MediaType;
 
@@ -56,20 +54,9 @@ class StudentControllerTest {
     objectMapper = new ObjectMapper();
     validator = Validation.buildDefaultValidatorFactory().getValidator();
 
-    // 受講生オブジェクトの準備
-    student = new Student();
-    student.setId(999);
-    student.setFullName("宮川心");
-    student.setNameRuby("ミヤカワココロ");
-    student.setNickname("こころ");
-    student.setEmailAddress("example@gmail.com");
-    student.setAddress("香川県");
-    student.setAge(33);
-    student.setGender("女性");
-
-    // 受講生コースオブジェクトの準備
-    course = new StudentCourse();
-    course.setCourseName("Javaフルコース");
+    // コンストラクタを使用してオブジェクトを生成
+    student = new Student(1, "宮川心", "ミヤカワココロ", "こころ", "example@gmail.com", "香川県", 33, "女性", "" ,false);
+    course = new StudentCourse(1, 1, "Javaフルコース", LocalDate.of(2023, 1, 10), LocalDate.of(2024, 1, 10));
 
     // 受講生詳細オブジェクトの準備
     studentDetail = new StudentDetail(student, List.of(course));

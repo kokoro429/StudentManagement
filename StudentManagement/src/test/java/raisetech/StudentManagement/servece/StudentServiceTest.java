@@ -32,7 +32,6 @@ class StudentServiceTest {
 
   @Mock
   private StudentConverter converter;
-
   private StudentService sut;
 
   @BeforeEach
@@ -123,9 +122,8 @@ class StudentServiceTest {
   @Test
   void initStudentCourseが正しく動作すること() {
     //事前準備
-    Student student = new Student();
-    student.setId(1);
-    StudentCourse studentCourse = new StudentCourse();
+    Student student = new Student(1, "宮川心", "ミヤカワココロ", "こころ", "example@gmail.com", "香川県", 33, "女性", "" ,false);
+    StudentCourse studentCourse = new StudentCourse(1, 1, "Javaフルコース", LocalDate.of(2023, 1, 10), LocalDate.of(2024, 1, 10));
 
     // 実行_パッケージプライベートメソッドを直接呼び出す
     sut.initStudentCourse(studentCourse, student);
@@ -139,8 +137,7 @@ class StudentServiceTest {
   @Test
   void 受講生詳細とコース情報が正常に更新されること() {
     //事前準備
-    Student student = new Student();
-    student.setId(1);
+    Student student = new Student(1, "宮川心", "ミヤカワココロ", "こころ", "example@gmail.com", "香川県", 33, "女性", "" ,false);
     List<StudentCourse> studentCourseList = new ArrayList<>();
     StudentCourse studentCourse = new StudentCourse();
     studentCourseList.add(studentCourse);
@@ -159,8 +156,7 @@ class StudentServiceTest {
   @Test
   void 存在しない受講生IDに対して例外がスローされること() {
     //事前準備
-    Student student = new Student();
-    student.setId(9999999);
+    Student student = new Student(9999999, "宮川心", "ミヤカワココロ", "こころ", "example@gmail.com", "香川県", 33, "女性", "" ,false);
     List<StudentCourse> studentCourseList = new ArrayList<>();
     StudentDetail studentDetail = new StudentDetail(student, studentCourseList);
     when(repository.existsById(student.getId())).thenReturn(false);
