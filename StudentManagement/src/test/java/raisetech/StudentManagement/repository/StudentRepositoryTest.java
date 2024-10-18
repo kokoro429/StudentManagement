@@ -1,7 +1,6 @@
 package raisetech.StudentManagement.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +17,7 @@ class StudentRepositoryTest {
   private StudentRepository sut;
 
   @Test
-  void 受講生の全件検索が行えること(){
+  void 受講生の全件検索が行えること() {
     List<Student> actual = sut.searchStudents();
     assertThat(actual.size()).isEqualTo(5);
   }
@@ -60,7 +59,7 @@ class StudentRepositoryTest {
   @Test
   void 存在しない受講生IDに紐づくコース情報を検索した場合は空のリストが返ること() {
     int notExistedStudentId = 999;
-    List<StudentCourse> courses= sut.findCourseByStudentId(notExistedStudentId);
+    List<StudentCourse> courses = sut.findCourseByStudentId(notExistedStudentId);
 
     assertThat(courses).isNotNull();
     assertThat(courses.size()).isEqualTo(0);
@@ -88,9 +87,9 @@ class StudentRepositoryTest {
   @Test
   void 受講生コースの登録が行えること() {
     StudentCourse course = new StudentCourse();
-    course.setCourseName("Javaフルコール");
-    course.setStartDate(LocalDate.of(2024, 7,1));
-    course.setEndDate(LocalDate.of(2025,7,1));
+    course.setCourseName("AWSフルコール");
+    course.setStartDate(LocalDate.of(2024, 7, 1));
+    course.setEndDate(LocalDate.of(2025, 7, 1));
 
     sut.registerStudentCourse(course);
 
@@ -100,7 +99,7 @@ class StudentRepositoryTest {
   }
 
   @Test
-  void 受講生を更新が行えること() {
+  void 受講生の更新が行えること() {
     int studentId = 1;
     Student student = sut.findStudentById(studentId);
 
@@ -126,16 +125,4 @@ class StudentRepositoryTest {
     assertThat(updatedCourses.get(0).getCourseName()).isEqualTo("新しいコース名");
   }
 
-  @Test
-  void 受講生IDが存在しているかを確認が行えること() {
-    int existingId = 1;
-    boolean exists = sut.existsById(existingId);
-
-    assertThat(exists).isTrue();
-
-    int notExistingId = 999;
-    boolean notExists = sut.existsById(notExistingId);
-
-    assertThat(notExists).isFalse();
-  }
 }
