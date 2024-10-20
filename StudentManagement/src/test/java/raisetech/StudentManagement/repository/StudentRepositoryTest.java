@@ -87,7 +87,7 @@ class StudentRepositoryTest {
   @Test
   void 受講生コースの登録が行えること() {
     StudentCourse course = new StudentCourse();
-    course.setCourseName("AWSフルコール");
+    course.setCourseName("新しいコース名");
     course.setStartDate(LocalDate.of(2024, 7, 1));
     course.setEndDate(LocalDate.of(2025, 7, 1));
 
